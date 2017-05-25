@@ -18,12 +18,24 @@
 
 # To decode, similar process, self explanatory.
 
+require "byebug.rb"
 
 class JW
-  @cypher = "The quick brown fox jumps over the lazy dog"
+  @cypher = "ruby is a dynamic, reflective, object-oriented, general-purpose programming language. it was designed and developed in the mid-1990s by yukihiro 'matz' matsumoto in japan."
+  #@cypher = "  a  ta  t"
+  #puts @cypher.length
   def self.encode(input_string)
-
-    return [0]
+    idx = 0
+    steps = []
+    #byebug
+    input_string.each_char do |c|
+      # Starting at the index of the previous char, find the next char we need
+      next_idx = (@cypher*2).index(c,idx) # cypher*2 to wrap-around
+      # Subtract to find how far we've moved along the cypher string
+      steps << next_idx - idx
+      idx = next_idx % @cypher.length # % to wrap-around
+    end
+    return steps
     # an array of numbers:
       # no number should be longer than the cypher string
       # no number should be negative
@@ -32,7 +44,7 @@ class JW
 
   def self.decode(number_array)
 
-    return "T"
+    return "T"*number_array.length
     # string of letters:
       # no letter should fail to appear in the cypher string
       # output string should be of equal length to the number_array
@@ -40,19 +52,14 @@ class JW
   end
 end
 
+p JW.encode("nick")
+p JW.decode([12, 3, 1, 122])
 
+=begin
+str = "fffsdfg"
+idx = 0
+4.times do
+  p idx = str.index("f", idx)+1
 
-
-
-describe JW do
-  describe "#encode" do
-    context "correct input" do
-      it "returns an array of numbers" do
-        expect(JW.encode("")).to be_an_instance_of(Array)
-        expect(JW.encode("d")).to be_an_instance_of(Array)
-      end
-      if "returns output of equal length to the input"
-        expect(JW.encode("aa")).to
-    end
-  end
 end
+=end
